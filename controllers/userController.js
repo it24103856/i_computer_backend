@@ -49,13 +49,15 @@ export function loginUser(req,res){
                     role: user.role,
                     isemailverified: user.isemailverified
                 }
-                    const token=jwt.sign(payload, "secretKey$2025", {expiresIn:"7d"});
+                    const token=jwt.sign(payload, process.env.JWT_SECRET, {expiresIn:"7d"});
 
                     
                 
                     res.json({
                          message: "Login successful", 
-                        token : token
+                        token : token,
+                        role: user.role
+
                         });
                 } else {
                     res.json({ message: "Invalid password" });

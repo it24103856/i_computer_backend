@@ -3,10 +3,13 @@ import mongoose from "mongoose"
 import userRouter from "./Routes/userRouter.js"
 import productRouter from "./Routes/productRouter.js"
 import jwt from "jsonwebtoken"
+import cors from "cors"
+import dotenv from "dotenv"
+
+dotenv.config();
 
 
-let mongoUrl="mongodb+srv://admin12:admin1234@cluster0.uas8odg.mongodb.net/?appName=Cluster0"
-
+const mongoUrl=process.env.Mongo_url;
 
 
 
@@ -18,8 +21,10 @@ mongoose.connect(mongoUrl).then(() => {
 
 let app = express()
 
-
 app.use(express.json())
+
+
+app.use(cors())
 
 // Log Authorization header for incoming requests (placed before routers)
 app.use((req, res, next) => {
@@ -29,7 +34,7 @@ app.use((req, res, next) => {
         const token = authorizationHeader.replace("Bearer ", "")
         console.log("Authorization Token:", token);
 
-         jwt.verify(token, "secretKey$2025", (error, content) => {
+         jwt.verify(token, process.env.JWT_SECRET, (error, content) => {
            if(error){
             console.log("Invalid token:", error.message);
            } else if(content){
@@ -42,8 +47,8 @@ app.use((req, res, next) => {
 });
 
 
-app.use("/users", userRouter);
-app.use("/products", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 
 
