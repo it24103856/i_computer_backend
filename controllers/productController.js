@@ -1,4 +1,4 @@
-import Product from "../models/product.js";
+import Product from "../models/Product.js";
 import { isAdmin } from "./userController.js";
 
 export function createProduct(req, res) {
@@ -89,6 +89,7 @@ const productID = req.params.productID;
             res.status(404).json({ message: "Product not found" });
         }else{
             res.json(product);
+            
         }
         
     }).catch(err => {
