@@ -5,6 +5,7 @@ import productRouter from "./Routes/productRouter.js"
 import jwt from "jsonwebtoken"
 import cors from "cors"
 import dotenv from "dotenv"
+import orderRouter from "./Routes/orderRouter.js"
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use((req, res, next) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/orders", orderRouter);
 
 
 

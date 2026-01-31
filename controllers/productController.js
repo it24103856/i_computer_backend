@@ -60,7 +60,6 @@ export function deleteProduct(req, res) {
         });
 }
 
-// 4. භාණ්ඩයක් යාවත්කාලීන කිරීම (Admins Only)
 export function updateProduct(req, res) {
     if (!isAdmin(req)) {
         return res.status(403).json({ message: "cant update unauthorized members" });
