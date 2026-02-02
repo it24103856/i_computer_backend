@@ -1,5 +1,6 @@
 import Order from "../models/order.js";
 import Product from "../models/Product.js";
+import { isAdmin } from "./userController.js";
 
 export async function createOrder(req, res) {
     try {
@@ -80,5 +81,27 @@ export async function getOrders(req, res) {
     } catch (err) {
         console.error("Error fetching orders:", err);
         return res.status(500).json({ message: "Error fetching orders", error: err.message });
+    }
+}
+
+export async function updateOrderStatus(req, res) {
+    if(!isAdmin(req)) {
+        res.status(401).json({ message: "Access denied. Admins only." });
+        return;
+    }
+    try {
+        const orderID = req.params.orderID;
+        const status = req.body.status;
+        const notes = req.body.notes;
+
+        await Order.updateOne(
+            { orderID: orderID },
+            {status: status, notes: notes}
+        );
+
+        res.json({ message: "Order status updated successfully" });
+    } catch (err) {
+        console.error("Error updating order status:", err);
+        res.status(500).json({ message: "Error updating order status", error: err.message });
     }
 }
