@@ -94,3 +94,28 @@ export function getProductByID(req, res) {
             res.status(500).json({ error: err.message });
         });
 }
+export async function searchProducts(req, res) {
+    // Frontend එකෙන් ?q=apple කියලා එවනවා නම් req.query.q ලෙස ගත යුතුය
+    const query = req.query.q; 
+    
+    if (!query) {
+        return res.status(400).json({ message: "Search query is required" });
+    }
+
+    try {
+        const products = await Product.find({
+            // මෙතන 'productName' ද බලන්න (ඔයාගේ Model එකේ තියෙන නම)
+            $or: [
+                { name: { $regex: query, $options: "i" } },
+                { altName: { $elemMatch: { $regex: query, $options: "i" } } }
+            ],
+            isAvailable: true 
+        });
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ 
+            message: "Error searching products",
+            error: err.message 
+        });
+    }
+}
